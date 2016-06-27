@@ -14,25 +14,15 @@
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 </head>
 <body>
-
 	<section id="react-mount">
+		<div>
+			<section class="content-wrapper">
+				This is rendered in HTML
+			</section>
+		</div>
 	</section>
 
 	<script type="text/babel">
-		// CHECKOUT 1
-		var Reddit = React.createClass({
-			render: function(){
-				return (
-					<div>
-						<section className="content-wrapper">
-							This is a React 
-						</section>
-					</div>
-				)
-			}
-		});
-
-		ReactDOM.render(<Reddit />, document.getElementById('react-mount'));
 	</script>
 </body>
 </html>
