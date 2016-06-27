@@ -1,0 +1,207 @@
+/*.notes {
+	width: 50%;
+    margin: auto;
+}
+
+.notes > header {
+	padding: .2em .5em;
+    background-color: #eee;
+}
+
+.new-note {
+	float: right;
+}
+
+.notes-tabs-area {
+	display: inline-block;
+    width: 30%;
+    float: left;
+}
+
+.notes-tab {
+	padding: 5px 0;
+}
+
+.notes-tab-content-area {
+	width: 70%;
+    height: 200px;
+    display: inline-block;
+}
+
+.notes-content {
+	width: 100%;
+    height: 200px;
+}*/
+
+
+* {
+	box-sizing: border-box;
+	font-family: sans-serif;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+h2 {
+	margin: 0;
+}
+
+p {
+	margin: 0;
+}
+
+ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+#react-mount {
+	background-color: #f2f2f2;
+	width: 700px;
+	min-height: 100vh;
+	margin: auto;
+	padding: 20px;
+}
+
+.add-thread {
+	margin-bottom: 20px;
+}
+
+.add-thread-form {
+	background-color: #e6e6e6;
+	border-radius: 5px;
+	padding: 20px 20px 10px 20px;
+}
+
+.thread-list .cf {
+	border-bottom: 1px dashed #ddd;
+	display: flex;
+	padding-top: 20px;
+}
+
+.thread-list .cf:last-child {
+	border-bottom: none;
+}
+
+
+.thread-list li .rank {
+	background-color: #e6e6e6;
+	height:45px;
+	width: 50px;
+	position: relative;
+	text-align: center;
+	vertical-align: middle;
+	margin-right: 30px;
+	border-radius: 50%;
+}
+
+.rank span {
+	font-size:16px;
+	font-weight: bold;
+	position: absolute;
+	top:50%;
+	left:50%;
+	transform: translate(-50%, -50%);
+}
+
+.thread-list li .vote {
+	height: 85px;
+	overflow: hidden;
+	text-align: center;
+	width:5%;
+}
+
+.vote {
+	margin-right: 20px;
+}
+
+.vote button {
+	background: none;
+	border:0;
+	color: #cecece;
+	cursor: pointer;
+	outline:none;
+	width: 100%;
+	padding: 0;
+}
+
+.vote .fa {
+	display: inline-block;
+	font-size: 18px;
+}
+
+.vote span {
+	display: block;
+	margin: 0;
+}
+
+.thread-list li .description {
+	padding: 0 .5em;
+	width: 92%;
+}
+
+.description h2 {
+	margin-bottom: 5px;
+	margin-top: 0;
+}
+
+.description p {
+	line-height:24px;
+}
+
+.description span {
+	font-weight: bold;
+	font-size: .75em;
+}
+
+.thread-list li .comments {
+	margin-top: 30px;
+}
+
+.comment-list li {
+	border-bottom: 1px dashed #ddd;
+	padding-top: 15px;
+}
+
+.comment-list li:first-child {
+	padding-top: 0;
+}
+
+.comment-list li:last-child {
+	border-bottom: none;
+}
+
+.comment h4 {
+	margin: 0;
+}
+
+.add-comment-form {
+	padding: 0;
+	margin-top: 30px;
+}
+
+.header-logo {
+	border-radius: 35px;
+    background-color: blue;
+    width: 70px;
+    height: 70px;
+}
+
+form {
+	padding: 2em;
+}
+
+input[type='text'] {
+	width: 100%;
+}
+
+textarea {
+	width: 100%;
+}
+
+button {
+	width: 10%;
+	background-color: green;
+}
