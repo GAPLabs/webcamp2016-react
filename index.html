@@ -43,6 +43,11 @@
 		});
 
 		var Thread = React.createClass({
+			getInitialState: function(){
+				return {
+					comments: []
+				}
+			},
 			render: function(){
 				return (
 					<li className="cf">
