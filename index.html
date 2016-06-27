@@ -15,14 +15,30 @@
 </head>
 <body>
 	<section id="react-mount">
-		<div>
-			<section class="content-wrapper">
-				This is rendered in HTML
-			</section>
-		</div>
 	</section>
 
 	<script type="text/babel">
+		// git checkout react2
+		var Reddit = React.createClass({
+
+			// Render method returns the markup to be rendered in the frontend
+			render: function(){
+				// Just like ordinary functions, you can perform calculations,
+				// string manipulations, conditions or loops before you render
+				// the final markup
+				return (
+					<div>
+						<section className="content-wrapper">
+							This is a React 
+						</section>
+					</div>
+				)
+			}
+
+		});
+
+		// The primary API for rendering the React component into the DOM
+		ReactDOM.render(<Reddit />, document.getElementById('react-mount'));
 	</script>
 </body>
 </html>
