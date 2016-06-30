@@ -18,7 +18,7 @@
 	</section>
 
 	<script type="text/babel">
-		// git checkout react4
+		// git checkout react5
 
 		var Comments = React.createClass({
 			render: function(){
@@ -49,14 +49,15 @@
 				}
 			},
 			render: function(){
+				var comments = (this.state.comments.length == 1) ? this.state.comments.length+" comment" : this.state.comments.length+" comments";
 				return (
 					<li className="cf">
 						<div className="description">
-							<h2>FBI finally hacks iPhone, ending court battle with Apple</h2>
-							<p>The FBI's sudden success in circumventing Apple's security measures might raise new questions about whether Apples products are truly ironclad.</p>
-							<span>submitted by: mashable | 0 comments</span>
+							<h2>{this.props.thread.title}</h2>
+							<p>{this.props.thread.description}</p>
+							<span>submitted by: {this.props.thread.submittedBy} | {comments}</span>
 
-							<Comments />
+							<Comments/>
 						</div>
 					</li>
 				)
@@ -79,7 +80,7 @@
 			},
 			render: function(){
 				var threads = this.state.threads.map(function(thread, index){
-									return <Thread />;
+									return <Thread thread={thread} key={index} index={index} />;
 								});
 
 				return (
