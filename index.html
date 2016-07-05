@@ -21,7 +21,7 @@
 		var Comment = React.createClass({
 			onClick: function(e){
 				e.preventDefault();
-
+				
 				var comment = {name:this.refs.name.value, comment:this.refs.comment.value};
 				
 				this.refs.name.value = '';
@@ -99,6 +99,8 @@
 			},
 
 			render: function(){
+				var name = "Edit name";
+				var commentCount = "0 comments";
 				return (
 					<li className="cf">
 						<div className="vote">
@@ -113,6 +115,7 @@
 						<div className="description">
 							<h2>{this.props.title}</h2>
 							<p>{this.props.description}</p>
+							<span>submitted by: {name} | {commentCount}</span>
 
 							<Comment index={this.props.index} comments={this.props.comments} newComments={this.state.comments} addComment={this.addComment} />
 						</div>
@@ -127,6 +130,7 @@
 					threads: [
 								{
 									vote: 0,
+									name: "Arya Stark",
 									title: "Game of Thrones from scale of 1 to 10",
 									description: "In a scale of 1 to 10, how much do you know? -Jon Snow",
 									comments: [
@@ -142,6 +146,7 @@
 								 },
 								 {
 								 	vote: 0,
+								 	name: "Theon Greyjoy",
 									title: "Game of Thrones from scale of 1 to 10",
 									description: "In a scale of 1 to 10, how much do you ...",
 									comments: [
