@@ -37,21 +37,14 @@
 		});
 
 		var Thread = React.createClass({
-			getInitialState: function(){
-				return {
-							title: "Game of Thrones from scale of 1 to 10",
-							description: "In a scale of 1 to 10, how much do you know? -Jon Snow"
-						};
-			},
-			
 			render: function(){
 				return (
 					<div>
 						<div className="description">
-							<h2>{this.state.title}</h2>
-							<p>{this.state.description}</p>
+							<h2>{this.props.title}</h2>
+							<p>{this.props.description}</p>
 
-							<Comment />
+							<Comment comment={this.props.comment}/>
 						</div>
 					</div>
 				)
@@ -59,11 +52,24 @@
 		});
 
 		var Reddit = React.createClass({
+			getInitialState: function(){
+				return {
+					thread: {
+								title: "Game of Thrones from scale of 1 to 10",
+								description: "In a scale of 1 to 10, how much do you know? -Jon Snow",
+								comment: {
+									name: "Jon Snow",
+									comment: "0; because I know nothing."
+								}
+							 }
+				}
+			},
+			
 			render: function(){
 				return (
 					<div>
 						Hello World!
-						<Thread />
+						<Thread title={this.state.thread.title} description={this.state.thread.description} comment={this.state.comment} />
 					</div>
 				)
 			}
