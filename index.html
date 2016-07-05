@@ -22,18 +22,30 @@
 			render: function(){
 				return (
 					<div>
-						I am a comment!
+						<h4>Jon Snow</h4>
+						<p>0; because I know nothing.</p>
 					</div>
 				)
 			}
 		});
 
 		var Thread = React.createClass({
+			getInitialState: function(){
+				return {
+							title: "Game of Thrones from scale of 1 to 10",
+							description: "In a scale of 1 to 10, how much do you know? -Jon Snow"
+						};
+			},
+			
 			render: function(){
 				return (
 					<div>
-						I am a thread!
-						<Comment />
+						<div className="description">
+							<h2>{this.state.title}</h2>
+							<p>{this.state.description}</p>
+
+							<Comment />
+						</div>
 					</div>
 				)
 			}
