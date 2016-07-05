@@ -30,9 +30,25 @@
 		});
 
 		var Thread = React.createClass({
+			onVoteUp: function(){
+				var vote = this.props.vote;
+				var newVote = vote + 1;
+
+				this.props.updateVote(this.props.index, newVote);
+			},
+
 			render: function(){
 				return (
 					<li className="cf">
+						<div className="vote">
+							<button onClick={this.onVoteUp}>
+								<i className="fa fa-chevron-up"></i>
+							</button>
+							<span>{this.props.vote}</span>
+							<button>
+								<i className="fa fa-chevron-down"></i>
+							</button>
+						</div>
 						<div className="description">
 							<h2>{this.props.title}</h2>
 							<p>{this.props.description}</p>
@@ -49,6 +65,7 @@
 				return {
 					threads: [
 								{
+									vote: 0,
 									title: "Game of Thrones from scale of 1 to 10",
 									description: "In a scale of 1 to 10, how much do you know? -Jon Snow",
 									comment: {
@@ -57,6 +74,7 @@
 									}
 								 },
 								 {
+								 	vote: 0,
 									title: "Game of Thrones from scale of 1 to 10",
 									description: "In a scale of 1 to 10, how much do you ...",
 									comment: {
@@ -67,10 +85,18 @@
 							 ]
 				}
 			},
+
+			updateVote: function(index, vote){
+				var threads = this.state.threads;
+				threads[index].vote = vote;
+
+				this.setState({threads:threads});
+			},
 			
 			render: function(){
+				var _this = this;
 				var threads = this.state.threads.map(function(thread, index){
-					return <Thread key={index} title={thread.title} description={thread.description} comment={thread.comment} />
+					return <Thread key={index} index={index} vote={thread.vote} title={thread.title} description={thread.description} comment={thread.comment} updateVote={_this.updateVote}/>
 				});
 				return (
 					<div>
