@@ -178,7 +178,22 @@
 				});
 				return (
 					<div>
-						Hello World!
+						<section className="add-thread">
+							<form className="add-thread-form">
+								<div className="form-group">
+									<input className="form-control" type='text' ref="title" name='title' placeholder='Title'/>
+								</div>
+								<div className="form-group">
+									<textarea className="form-control" ref="body" name='body' placeholder='Body'></textarea>
+								</div>
+								<div className="form-group">
+									<input className="form-control" type='text' ref='submittedBy' name='submittedBy' placeholder='Name'/>
+								</div>
+								<div className="form-group">
+									<button className="btn btn-default"><i className='fa fa-1x fa-plus'></i></button>
+								</div>
+							</form>
+						</section>
 						<section className="content-wrapper">
 							<ul className="thread-list">
 								{threads}
