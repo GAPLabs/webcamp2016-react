@@ -99,8 +99,8 @@
 			},
 
 			render: function(){
-				var name = "Edit name";
-				var commentCount = "0 comments";
+				var commentCount = this.props.comments.length;
+				
 				return (
 					<li className="cf">
 						<div className="vote">
@@ -115,7 +115,7 @@
 						<div className="description">
 							<h2>{this.props.title}</h2>
 							<p>{this.props.description}</p>
-							<span>submitted by: {name} | {commentCount}</span>
+							<span>submitted by: {this.props.name} | {commentCount} comments</span>
 
 							<Comment index={this.props.index} comments={this.props.comments} newComments={this.state.comments} addComment={this.addComment} />
 						</div>
@@ -174,7 +174,7 @@
 			render: function(){
 				var _this = this;
 				var threads = this.state.threads.map(function(thread, index){
-					return <Thread key={index} index={index} vote={thread.vote} title={thread.title} description={thread.description} comments={thread.comments} updateVote={_this.updateVote} addComment={_this.addComment}/>
+					return <Thread key={index} index={index} name={thread.name} vote={thread.vote} title={thread.title} description={thread.description} comments={thread.comments} updateVote={_this.updateVote} addComment={_this.addComment}/>
 				});
 				return (
 					<div>
