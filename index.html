@@ -18,44 +18,40 @@
 	</section>
 
 	<script type="text/babel">
-		// git checkout react2
+		var Comment = React.createClass({
+			render: function(){
+				return (
+					<div>
+						I am a comment!
+					</div>
+				)
+			}
+		});
+
 		var Thread = React.createClass({
 			render: function(){
 				return (
-					<li className="cf">
-						<div className="description">
-							<h2>FBI finally hacks iPhone, ending court battle with Apple</h2>
-							<p>The FBI's sudden success in circumventing Apple's security measures might raise new questions about whether Apples products are truly ironclad.</p>
-							<span>submitted by: mashable | 0 comments</span>
-						</div>
-					</li>
+					<div>
+						I am a thread!
+						<Comment />
+					</div>
 				)
 			}
 		});
 
 		var Reddit = React.createClass({
-
-			// Render method returns the markup to be rendered in the frontend
 			render: function(){
-				// Just like ordinary functions, you can perform calculations,
-				// string manipulations, conditions or loops before you render
-				// the final markup
-
-				// Returns how this component should look like
 				return (
 					<div>
-						<section className="content-wrapper">
-							<ul className="thread-list">
-								<Thread />
-							</ul> 
-						</section>
+						Hello World!
+						<Thread />
 					</div>
 				)
 			}
 
 		});
 
-		// The primary API for rendering the React component into the DOM
+		
 		ReactDOM.render(<Reddit />, document.getElementById('react-mount'));
 	</script>
 </body>
