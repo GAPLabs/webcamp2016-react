@@ -19,17 +19,62 @@
 
 	<script type="text/babel">
 		var Comment = React.createClass({
+			onClick: function(e){
+				e.preventDefault();
+
+				var comment = {name:this.refs.name.value, comment:this.refs.comment.value};
+				
+				this.refs.name.value = '';
+				this.refs.comment.value = '';
+
+				this.props.addComment( comment );
+			},
+
 			render: function(){
+				var comments = this.props.comments.map(function(comment, index){
+					return  <li className="cd comment" key={index}>
+								<h4>{comment.name}</h4>
+								<p>{comment.comment}</p>
+							</li>;
+				});
+
+				var newComments = this.props.newComments.map(function(comment, index){
+					return  <li className="cd comment" key={index}>
+								<h4>{comment.name}</h4>
+								<p>{comment.comment}</p>
+							</li>;
+				});
+
 				return (
-					<div>
-						<h4>{this.props.comment.name}</h4>
-						<p>{this.props.comment.comment}</p>
+					<div className="comments">
+						<ul className="comment-list">
+							{comments}
+						</ul>
+						<section className="add-thread">
+							<form className="add-comment-form">
+								<div className="form-group">
+									<input className="form-control" type='text' ref="name" name='name' placeholder='Name'/>
+								</div>
+								<div className="form-group">
+									<textarea className="form-control" ref="comment" name='comment' placeholder='Comment'></textarea>
+								</div>
+								<div className="form-group">
+									<button className="btn btn-default" onClick={this.onClick}><i className='fa fa-1x fa-plus'></i></button>
+								</div>
+							</form>
+						</section>
 					</div>
 				)
 			}
 		});
 
 		var Thread = React.createClass({
+			getInitialState: function(){
+				return {
+					comments: []
+				}
+			},
+
 			onVoteUp: function(){
 				var vote = this.props.vote;
 				var newVote = vote + 1;
@@ -42,6 +87,15 @@
 				var newVote = vote - 1;
 
 				this.props.updateVote(this.props.index, newVote);
+			},
+
+			addComment: function(comment){
+				var comments = this.state.comments;
+				var thread = this.state.thread;
+
+				comments.push(comment);
+				this.props.addComment(this.props.index, comment);
+				this.setState({comments:comments});
 			},
 
 			render: function(){
@@ -60,7 +114,7 @@
 							<h2>{this.props.title}</h2>
 							<p>{this.props.description}</p>
 
-							<Comment comment={this.props.comment}/>
+							<Comment index={this.props.index} comments={this.props.comments} newComments={this.state.comments} addComment={this.addComment} />
 						</div>
 					</li>
 				)
@@ -75,19 +129,27 @@
 									vote: 0,
 									title: "Game of Thrones from scale of 1 to 10",
 									description: "In a scale of 1 to 10, how much do you know? -Jon Snow",
-									comment: {
-										name: "Jon Snow",
-										comment: "0; because I know nothing."
-									}
+									comments: [
+												{
+													name: "Jon Snow",
+													comment: "0; because I know nothing."
+												},
+												{
+													name: "Tommen Baratheon",
+													comment: "Por asdir aloer av vir io sdo  os"
+												}
+											]
 								 },
 								 {
 								 	vote: 0,
 									title: "Game of Thrones from scale of 1 to 10",
 									description: "In a scale of 1 to 10, how much do you ...",
-									comment: {
-										name: "Sansa Stark",
-										comment: "Lorem ipsum dolor sit amet"
-									}
+									comments: [
+												{
+													name: "Sansa Stark",
+													comment: "Lorem ipsum dolor sit amet"
+												}
+											]
 								 },
 							 ]
 				}
@@ -99,11 +161,15 @@
 
 				this.setState({threads:threads});
 			},
-			
+
+			addComment: function(index, comment){
+				this.state.threads[index].comments.push(comment);
+			},
+
 			render: function(){
 				var _this = this;
 				var threads = this.state.threads.map(function(thread, index){
-					return <Thread key={index} index={index} vote={thread.vote} title={thread.title} description={thread.description} comment={thread.comment} updateVote={_this.updateVote}/>
+					return <Thread key={index} index={index} vote={thread.vote} title={thread.title} description={thread.description} comments={thread.comments} updateVote={_this.updateVote} addComment={_this.addComment}/>
 				});
 				return (
 					<div>
