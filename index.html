@@ -18,48 +18,28 @@
 	</section>
 
 	<script type="text/babel">
-		// git checkout react5
-
-		var Comments = React.createClass({
+		var Comment = React.createClass({
 			render: function(){
 				return (
-					<div className="comments">
-						<section className="add-thread">
-							<form className="add-comment-form">
-								<div className="form-group">
-									<input className="form-control" type='text' ref="name" name='name' placeholder='Name'/>
-								</div>
-								<div className="form-group">
-									<textarea className="form-control" ref="comment" name='comment' placeholder='Comment'></textarea>
-								</div>
-								<div className="form-group">
-									<button className="btn btn-default"><i className='fa fa-1x fa-plus'></i></button>
-								</div>
-							</form>
-						</section>
+					<div>
+						<h4>{this.props.name}</h4>
+						<p>{this.props.comment}</p>
 					</div>
 				)
 			}
 		});
 
 		var Thread = React.createClass({
-			getInitialState: function(){
-				return {
-					comments: []
-				}
-			},
 			render: function(){
-				var comments = (this.state.comments.length == 1) ? this.state.comments.length+" comment" : this.state.comments.length+" comments";
 				return (
-					<li className="cf">
+					<div>
 						<div className="description">
-							<h2>{this.props.thread.title}</h2>
-							<p>{this.props.thread.description}</p>
-							<span>submitted by: {this.props.thread.submittedBy} | {comments}</span>
+							<h2>{this.props.title}</h2>
+							<p>{this.props.description}</p>
 
-							<Comments/>
+							<Comment comment={this.props.comment}/>
 						</div>
-					</li>
+					</div>
 				)
 			}
 		});
@@ -67,36 +47,29 @@
 		var Reddit = React.createClass({
 			getInitialState: function(){
 				return {
-					threads: [{
-								rank: 1,
-								vote: 1,
-								title: 'FBI finally hacks iPhone, ending court battle with Apple',
-								description: "The FBI's sudden success in circumventing Apple's security measures might raise new questions about whether Apple's products are truly ironclad. It will also lead to heightened speculation over the \"outside party\" that assisted the government at the last minute and criticism from some quarters over the FBI's failure to hack into an iPhone on its own.",
-								submittedBy: 'mashable',
-								commentCount: 0,
-								comments: []
-							  }]
+					thread: {
+								title: "Game of Thrones from scale of 1 to 10",
+								description: "In a scale of 1 to 10, how much do you know? -Jon Snow",
+								comment: {
+									name: "Jon Snow",
+									comment: "0; because I know nothing."
+								}
+							 }
 				}
 			},
+			
 			render: function(){
-				var threads = this.state.threads.map(function(thread, index){
-									return <Thread thread={thread} key={index} index={index} />;
-								});
-
 				return (
 					<div>
-						<section className="content-wrapper">
-							<ul className="thread-list">
-								{threads}
-							</ul> 
-						</section>
+						Hello World!
+						<Thread title={this.state.thread.title} description={this.state.thread.description} comment={this.state.comment} />
 					</div>
 				)
 			}
 
 		});
 
-		// The primary API for rendering the React component into the DOM
+		
 		ReactDOM.render(<Reddit />, document.getElementById('react-mount'));
 	</script>
 </body>
