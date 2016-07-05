@@ -37,6 +37,13 @@
 				this.props.updateVote(this.props.index, newVote);
 			},
 
+			onVoteDown: function(){
+				var vote = this.props.vote;
+				var newVote = vote - 1;
+
+				this.props.updateVote(this.props.index, newVote);
+			},
+
 			render: function(){
 				return (
 					<li className="cf">
@@ -45,7 +52,7 @@
 								<i className="fa fa-chevron-up"></i>
 							</button>
 							<span>{this.props.vote}</span>
-							<button>
+							<button onClick={this.onVoteDown}>
 								<i className="fa fa-chevron-down"></i>
 							</button>
 						</div>
