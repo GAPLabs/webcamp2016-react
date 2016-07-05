@@ -1,27 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>React 2016</title>
+	<title>Notes</title>
 	<script src="js/react.js"></script>
 	<script src="js/react-dom.js"></script>
 	<script src="js/browser.min.js"></script>
 	<script src="js/jquery-2.1.4.js"></script>
 	<script src="js/lodash.js"></script>
 	<script src="js/jsx-transformer.js"></script>
-
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 </head>
 <body>
+
 	<section id="react-mount">
 	</section>
 
 	<script type="text/babel">
-		var Comment = React.createClass({
-			onClick: function(e){
-				e.preventDefault();
-				
+		var Header = React.createClass({
+			render: function(){
+				return (
+					<div>
+						<div className="header-logo"><i className="fa fa-3x fa-align-justify"></i></div>
+						<div>Lorem ipsum dolor sit amet invictus y ambot na.</div>
+					</div>
+				)
+			}
+		});
+		
+		var Comments = React.createClass({
+			componentDidMount: function(){
+				$('.add-comment-form').on('submit', function(e) {
+				    e.preventDefault();
+				});
+			},
+			onClick: function(){
 				var comment = {name:this.refs.name.value, comment:this.refs.comment.value};
 				
 				this.refs.name.value = '';
@@ -29,7 +43,6 @@
 
 				this.props.addComment( comment );
 			},
-
 			render: function(){
 				var comments = this.props.comments.map(function(comment, index){
 					return  <li className="cd comment" key={index}>
@@ -37,14 +50,6 @@
 								<p>{comment.comment}</p>
 							</li>;
 				});
-
-				var newComments = this.props.newComments.map(function(comment, index){
-					return  <li className="cd comment" key={index}>
-								<h4>{comment.name}</h4>
-								<p>{comment.comment}</p>
-							</li>;
-				});
-
 				return (
 					<div className="comments">
 						<ul className="comment-list">
@@ -71,54 +76,49 @@
 		var Thread = React.createClass({
 			getInitialState: function(){
 				return {
-					comments: []
+					comments: [],
+					thread: {}
 				}
 			},
-
-			onVoteUp: function(){
-				var vote = this.props.vote;
-				var newVote = vote + 1;
-
-				this.props.updateVote(this.props.index, newVote);
-			},
-
-			onVoteDown: function(){
-				var vote = this.props.vote;
-				var newVote = vote - 1;
-
-				this.props.updateVote(this.props.index, newVote);
-			},
-
 			addComment: function(comment){
 				var comments = this.state.comments;
 				var thread = this.state.thread;
 
 				comments.push(comment);
+				thread.commentCount = comments.length;
 				this.props.addComment(this.props.index, comment);
 				this.setState({comments:comments});
 			},
-
+			onVoteUp: function(){
+				this.props.updateVote(this.props.index, this.props.thread.vote + 1);
+			},
+			onVoteDown: function(){
+				this.props.updateVote(this.props.index, this.props.thread.vote - 1);
+			},
 			render: function(){
-				var commentCount = this.props.comments.length;
-				
+				var comments = (this.state.comments.length == 1) ? this.state.comments.length+" comment" : this.state.comments.length+" comments";
 				return (
 					<li className="cf">
+						<div className="rank">
+							<span>{this.props.index + 1}</span>
+						</div>
 						<div className="vote">
 							<button onClick={this.onVoteUp}>
 								<i className="fa fa-chevron-up"></i>
 							</button>
-							<span>{this.props.vote}</span>
+							<span>{this.props.thread.vote}</span>
 							<button onClick={this.onVoteDown}>
 								<i className="fa fa-chevron-down"></i>
 							</button>
 						</div>
 						<div className="description">
-							<h2>{this.props.title}</h2>
-							<p>{this.props.description}</p>
-							<span>submitted by: {this.props.name} | {commentCount} comments</span>
+							<h2>{this.props.thread.title}</h2>
+							<p>{this.props.thread.description}</p>
+							<span>submitted by: {this.props.thread.submittedBy} | {comments}</span>
 
-							<Comment index={this.props.index} comments={this.props.comments} newComments={this.state.comments} addComment={this.addComment} />
+							<Comments addComment={this.addComment} comments={this.state.comments}/>
 						</div>
+						
 					</li>
 				)
 			}
@@ -127,55 +127,62 @@
 		var Reddit = React.createClass({
 			getInitialState: function(){
 				return {
-					threads: [
-								{
-									vote: 0,
-									name: "Arya Stark",
-									title: "Game of Thrones from scale of 1 to 10",
-									description: "In a scale of 1 to 10, how much do you know? -Jon Snow",
-									comments: [
-												{
-													name: "Jon Snow",
-													comment: "0; because I know nothing."
-												},
-												{
-													name: "Tommen Baratheon",
-													comment: "Por asdir aloer av vir io sdo  os"
-												}
-											]
-								 },
-								 {
-								 	vote: 0,
-								 	name: "Theon Greyjoy",
-									title: "Game of Thrones from scale of 1 to 10",
-									description: "In a scale of 1 to 10, how much do you ...",
-									comments: [
-												{
-													name: "Sansa Stark",
-													comment: "Lorem ipsum dolor sit amet"
-												}
-											]
-								 },
-							 ]
+					threads: [{
+								rank: 1,
+								vote: 1,
+								title: 'FBI finally hacks iPhone, ending court battle with Apple',
+								description: "The FBI's sudden success in circumventing Apple's security measures might raise new questions about whether Apple's products are truly ironclad. It will also lead to heightened speculation over the \"outside party\" that assisted the government at the last minute and criticism from some quarters over the FBI's failure to hack into an iPhone on its own.",
+								submittedBy: 'mashable',
+								commentCount: 0,
+								comments: []
+							  }]
 				}
 			},
+			componentDidMount: function(){
+				$('.add-thread-form').on('submit', function(e) {
+				    e.preventDefault();
+				});
+			},
+			onClick: function(){
+				var title = this.refs.title.value;
+				var body = this.refs.body.value;
+				var submittedBy = this.refs.submittedBy.value;
 
+				if(title == '' || body == '' || submittedBy == ''){
+					
+				}
+				else {
+					this.refs.title.value = '';
+					this.refs.body.value = '';
+					this.refs.submittedBy.value = '';
+
+					var threads = this.state.threads;
+					var rank = threads.length + 1;
+
+					threads.push({rank:rank, vote: 0, title:title, description:body, submittedBy:submittedBy, commentCount:0, comments: []});
+
+					this.setState({threads:threads});
+				}
+			},
 			updateVote: function(index, vote){
 				var threads = this.state.threads;
 				threads[index].vote = vote;
+				
+			    var sorted = threads.sort(function(a, b){
+			    	return b.vote-a.vote
+			    });
 
-				this.setState({threads:threads});
+			    this.setState({threads:sorted});
 			},
-
 			addComment: function(index, comment){
 				this.state.threads[index].comments.push(comment);
 			},
-
 			render: function(){
 				var _this = this;
 				var threads = this.state.threads.map(function(thread, index){
-					return <Thread key={index} index={index} name={thread.name} vote={thread.vote} title={thread.title} description={thread.description} comments={thread.comments} updateVote={_this.updateVote} addComment={_this.addComment}/>
-				});
+									console.log(thread.vote);
+									return <Thread thread={thread} key={index} index={index} updateVote={_this.updateVote} addComment={_this.addComment}/>;
+								});
 				return (
 					<div>
 						<section className="add-thread">
@@ -190,7 +197,7 @@
 									<input className="form-control" type='text' ref='submittedBy' name='submittedBy' placeholder='Name'/>
 								</div>
 								<div className="form-group">
-									<button className="btn btn-default"><i className='fa fa-1x fa-plus'></i></button>
+									<button className="btn btn-default" onClick={this.onClick}><i className='fa fa-1x fa-plus'></i></button>
 								</div>
 							</form>
 						</section>
@@ -202,10 +209,8 @@
 					</div>
 				)
 			}
-
 		});
 
-		
 		ReactDOM.render(<Reddit />, document.getElementById('react-mount'));
 	</script>
 </body>
