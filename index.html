@@ -5,9 +5,7 @@
 	<script src="js/react.js"></script>
 	<script src="js/react-dom.js"></script>
 	<script src="js/browser.min.js"></script>
-	<script src="js/jquery-2.1.4.js"></script>
-	<script src="js/lodash.js"></script>
-	<script src="js/jsx-transformer.js"></script>
+	
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -30,12 +28,9 @@
 		});
 		
 		var Comments = React.createClass({
-			componentDidMount: function(){
-				$('.add-comment-form').on('submit', function(e) {
-				    e.preventDefault();
-				});
-			},
-			onClick: function(){
+			onClick: function(e){
+				e.preventDefault();
+
 				var comment = {name:this.refs.name.value, comment:this.refs.comment.value};
 				
 				this.refs.name.value = '';
@@ -138,12 +133,8 @@
 							  }]
 				}
 			},
-			componentDidMount: function(){
-				$('.add-thread-form').on('submit', function(e) {
-				    e.preventDefault();
-				});
-			},
-			onClick: function(){
+			onClick: function(e){
+				e.preventDefault();
 				var title = this.refs.title.value;
 				var body = this.refs.body.value;
 				var submittedBy = this.refs.submittedBy.value;
