@@ -5,6 +5,7 @@
 	<script src="js/react.js"></script>
 	<script src="js/react-dom.js"></script>
 	<script src="js/browser.min.js"></script>
+	<script src="js/threads.js"></script>
 	
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -122,15 +123,7 @@
 		var Reddit = React.createClass({
 			getInitialState: function(){
 				return {
-					threads: [{
-								rank: 1,
-								vote: 1,
-								title: 'FBI finally hacks iPhone, ending court battle with Apple',
-								description: "The FBI's sudden success in circumventing Apple's security measures might raise new questions about whether Apple's products are truly ironclad. It will also lead to heightened speculation over the \"outside party\" that assisted the government at the last minute and criticism from some quarters over the FBI's failure to hack into an iPhone on its own.",
-								submittedBy: 'mashable',
-								commentCount: 0,
-								comments: []
-							  }]
+					threads: threads
 				}
 			},
 			onClick: function(e){
