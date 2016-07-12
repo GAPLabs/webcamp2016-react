@@ -5,9 +5,7 @@
 	<script src="js/react.js"></script>
 	<script src="js/react-dom.js"></script>
 	<script src="js/browser.min.js"></script>
-	<script src="js/jquery-2.1.4.js"></script>
-	<script src="js/lodash.js"></script>
-	<script src="js/jsx-transformer.js"></script>
+	<script src="js/threads.js"></script>
 
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -47,24 +45,7 @@
 		var Reddit = React.createClass({
 			getInitialState: function(){
 				return {
-					threads: [
-								{
-									title: "Game of Thrones from scale of 1 to 10",
-									description: "In a scale of 1 to 10, how much do you know? -Jon Snow",
-									comment: {
-										name: "Jon Snow",
-										comment: "0; because I know nothing."
-									}
-								 },
-								 {
-									title: "Game of Thrones from scale of 1 to 10",
-									description: "In a scale of 1 to 10, how much do you ...",
-									comment: {
-										name: "Sansa Stark",
-										comment: "Lorem ipsum dolor sit amet"
-									}
-								 },
-							 ]
+					threads: threads
 				}
 			},
 			
