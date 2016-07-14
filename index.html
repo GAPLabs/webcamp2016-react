@@ -7,8 +7,8 @@
 	<script src="js/browser.min.js"></script>
 
 	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<section id="react-mount">
@@ -18,9 +18,9 @@
 		var Thread = React.createClass({
 			render: function(){
 				return (
-					<div>
+					<li>
 						I am a thread!
-					</div>
+					</li>
 				)
 			}
 		});
@@ -30,7 +30,10 @@
 				return (
 					<div>
 						Hello World!
-						<Thread />
+						
+						<ul className="news-list">
+							<Thread />
+						</ul>
 					</div>
 				)
 			}
