@@ -7,36 +7,46 @@
 	<script src="js/browser.min.js"></script>
 
 	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<section id="react-mount">
 	</section>
 
 	<script type="text/babel">
-		var Comment = React.createClass({
+		var Comments = React.createClass({
 			render: function(){
 				return (
-					<div>
-						<h4>{this.props.name}</h4>
-						<p>{this.props.comment}</p>
-					</div>
+					<ul className="comments">
+						<li>
+							<p>{this.props.comment.comment}</p>
+							<strong>{this.props.comment.name}</strong>
+						</li>
+					</ul>
 				)
 			}
 		});
 
 		var Thread = React.createClass({
+			getInitialState: function(){
+				return {
+							
+						};
+			},
+			
 			render: function(){
 				return (
-					<div>
-						<div className="description">
-							<h2>{this.props.title}</h2>
-							<p>{this.props.description}</p>
-
-							<Comment comment={this.props.comment}/>
+					<li>
+						<div className="news-item">
+							<div className="content">
+								<h2>{this.props.title}</h2>
+								<p>{this.props.description}</p>
+							</div>
 						</div>
-					</div>
+
+						<Comments comment={this.props.comment}/>
+					</li>
 				)
 			}
 		});
@@ -45,21 +55,22 @@
 			getInitialState: function(){
 				return {
 					thread: {
-								title: "Game of Thrones from scale of 1 to 10",
-								description: "In a scale of 1 to 10, how much do you know? -Jon Snow",
-								comment: {
-									name: "Jon Snow",
-									comment: "0; because I know nothing."
-								}
-							 }
+						title: "Why playing Pokemon Go could cost you, big time",
+						description: 'In the interest of public information and safety, TheWrap reached out to the Los Angeles County Sheriff\'s Department to find out what the penalties of Pokemon GO-ing while driving. "The penalty for the infraction depends on previous driving convictions," Hill explained. "The first time penalty for cell phone violation is $20 and $50 for each subsequent offense."',
+						comment: {
+							name: "Neil Alvarez",
+							comment: "I can assure you...you hit me while driving playing this game, the $150 ticket will be the least of your worries."
+						}
+					}
 				}
 			},
-			
+
 			render: function(){
 				return (
 					<div>
-						Hello World!
-						<Thread title={this.state.thread.title} description={this.state.thread.description} comment={this.state.comment} />
+						<ul className="news-list">
+							<Thread title={this.state.thread.title} description={this.state.thread.description} comment={this.state.thread.comment} />
+						</ul>
 					</div>
 				)
 			}
