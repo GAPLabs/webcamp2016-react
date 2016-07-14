@@ -7,21 +7,20 @@
 	<script src="js/browser.min.js"></script>
 
 	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<section id="react-mount">
 	</section>
 
 	<script type="text/babel">
-		var Comment = React.createClass({
+		var Comments = React.createClass({
 			render: function(){
 				return (
-					<div>
-						<h4>Jon Snow</h4>
-						<p>0; because I know nothing.</p>
-					</div>
+					<ul className="comments">
+						<li>I am a comment</li>
+					</ul>
 				)
 			}
 		});
@@ -29,21 +28,23 @@
 		var Thread = React.createClass({
 			getInitialState: function(){
 				return {
-							title: "Game of Thrones from scale of 1 to 10",
-							description: "In a scale of 1 to 10, how much do you know? -Jon Snow"
+							title: "Why playing Pokemon Go could cost you, big time",
+							description: 'In the interest of public information and safety, TheWrap reached out to the Los Angeles County Sheriff\'s Department to find out what the penalties of Pokemon GO-ing while driving. "The penalty for the infraction depends on previous driving convictions," Hill explained. "The first time penalty for cell phone violation is $20 and $50 for each subsequent offense."'
 						};
 			},
 			
 			render: function(){
 				return (
-					<div>
-						<div className="description">
-							<h2>{this.state.title}</h2>
-							<p>{this.state.description}</p>
-
-							<Comment />
+					<li>
+						<div className="news-item">
+							<div className="content">
+								<h2>{this.state.title}</h2>
+								<p>{this.state.description}</p>
+							</div>
 						</div>
-					</div>
+
+						<Comments />
+					</li>
 				)
 			}
 		});
@@ -52,8 +53,9 @@
 			render: function(){
 				return (
 					<div>
-						Hello World!
-						<Thread />
+						<ul className="news-list">
+							<Thread />
+						</ul>
 					</div>
 				)
 			}
