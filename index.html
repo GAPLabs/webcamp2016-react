@@ -8,58 +8,65 @@
 	<script src="js/threads.js"></script>
 
 	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<section id="react-mount">
 	</section>
 
 	<script type="text/babel">
-		var Comment = React.createClass({
+		var Comments = React.createClass({
 			render: function(){
 				return (
-					<div>
-						<h4>{this.props.comment.name}</h4>
-						<p>{this.props.comment.comment}</p>
-					</div>
+					<ul className="comments">
+						<li>
+							<p>{this.props.comments[0].comment}</p>
+							<strong>{this.props.comments[0].name}</strong>
+						</li>
+					</ul>
 				)
 			}
 		});
 
 		var Thread = React.createClass({
+			getInitialState: function(){
+				return {
+							
+						};
+			},
+			
 			onVoteUp: function(){
-				var vote = this.props.vote;
-				var newVote = vote + 1;
-
-				this.props.updateVote(this.props.index, newVote);
+				//console.log('onVoteUp clicked!');
+				this.props.updateVote(this.props.index, this.props.thread.vote + 1);
 			},
 
 			onVoteDown: function(){
-				var vote = this.props.vote;
-				var newVote = vote - 1;
-
-				this.props.updateVote(this.props.index, newVote);
+				this.props.updateVote(this.props.index, this.props.thread.vote - 1);
 			},
 
 			render: function(){
-				return (
-					<li className="cf">
-						<div className="vote">
-							<button onClick={this.onVoteUp}>
-								<i className="fa fa-chevron-up"></i>
-							</button>
-							<span>{this.props.vote}</span>
-							<button onClick={this.onVoteDown}>
-								<i className="fa fa-chevron-down"></i>
-							</button>
-						</div>
-						<div className="description">
-							<h2>{this.props.title}</h2>
-							<p>{this.props.description}</p>
+				var comments = (this.props.thread.comments.length == 1) ? this.props.thread.comments.length+" comment" : this.props.thread.comments.length+" comments";
 
-							<Comment comment={this.props.comment}/>
+				return (
+					<li>
+						<div className="news-item">
+							<div className="votes">
+								<button className="up" onClick={this.onVoteUp}><span></span></button>
+								<p>{this.props.thread.vote}</p>
+								<button className="down" onClick={this.onVoteDown}><span></span></button>
+							</div>
+
+							<div className="content">
+								<h2>{this.props.thread.title}</h2>
+								<p>{this.props.thread.description}</p>
+								<footer>
+									<p className="news-submitter">Submitted by <strong>{this.props.thread.submittedBy}</strong> | <strong>{comments}</strong></p>
+								</footer>
+							</div>
 						</div>
+
+						<Comments comments={this.props.thread.comments}/>
 					</li>
 				)
 			}
@@ -76,22 +83,23 @@
 				var threads = this.state.threads;
 				threads[index].vote = vote;
 
-				this.setState({threads:threads});
+			    this.setState({threads:threads});
 			},
-			
+
 			render: function(){
 				var _this = this;
 				var threads = this.state.threads.map(function(thread, index){
-					return <Thread key={index} index={index} vote={thread.vote} title={thread.title} description={thread.description} comment={thread.comment} updateVote={_this.updateVote}/>
+					return <Thread key={index}
+								   index={index}
+								   thread={thread}
+								   updateVote={_this.updateVote} />
 				});
+
 				return (
 					<div>
-						Hello World!
-						<section className="content-wrapper">
-							<ul className="thread-list">
-								{threads}
-							</ul>
-						</section>
+						<ul className="news-list">
+							{threads}
+						</ul>
 					</div>
 				)
 			}
