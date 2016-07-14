@@ -8,63 +8,56 @@
 	<script src="js/threads.js"></script>
 	
 	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 </head>
 <body>
-
 	<section id="react-mount">
 	</section>
 
-	<script type="text/babel">
-		var Header = React.createClass({
-			render: function(){
-				return (
-					<div>
-						<div className="header-logo"><i className="fa fa-3x fa-align-justify"></i></div>
-						<div>Lorem ipsum dolor sit amet invictus y ambot na.</div>
-					</div>
-				)
-			}
-		});
-		
+	<script type="text/babel">		
 		var Comments = React.createClass({
 			onClick: function(e){
 				e.preventDefault();
 
-				var comment = {name:this.refs.name.value, comment:this.refs.comment.value};
-				
-				this.refs.name.value = '';
-				this.refs.comment.value = '';
+				var name = this.refs.name.value;
+				var comment = this.refs.comment.value;
 
-				this.props.addComment( comment );
+				if(name != "" && comment != ""){
+					var comment = {name:name, comment:comment};
+					
+					this.refs.name.value = '';
+					this.refs.comment.value = '';
+
+					this.props.addComment( comment );
+				}
 			},
+
 			render: function(){
 				var comments = this.props.comments.map(function(comment, index){
-					return  <li className="cd comment" key={index}>
-								<h4>{comment.name}</h4>
+					return  <li key={index}>
 								<p>{comment.comment}</p>
+								<strong>{comment.name}</strong>
 							</li>;
 				});
+
+				var commentForm;
+				if(this.props.isShowCommentForm){
+					commentForm = <li>
+									<form>
+										<input type="text" ref="name" name='name' placeholder='Name' />
+										<textarea cols="30" rows="10" ref="comment" name='comment' placeholder='Comment'></textarea>
+										<input type="submit" value="Submit" onClick={this.onClick} />
+									</form>
+								  </li>;
+				}
+
 				return (
-					<div className="comments">
-						<ul className="comment-list">
-							{comments}
-						</ul>
-						<section className="add-thread">
-							<form className="add-comment-form">
-								<div className="form-group">
-									<input className="form-control" type='text' ref="name" name='name' placeholder='Name'/>
-								</div>
-								<div className="form-group">
-									<textarea className="form-control" ref="comment" name='comment' placeholder='Comment'></textarea>
-								</div>
-								<div className="form-group">
-									<button className="btn btn-default" onClick={this.onClick}><i className='fa fa-1x fa-plus'></i></button>
-								</div>
-							</form>
-						</section>
-					</div>
+					<ul className="comments">
+						{commentForm}
+
+						{comments}
+					</ul>
 				)
 			}
 		});
@@ -73,9 +66,11 @@
 			getInitialState: function(){
 				return {
 					comments: [],
-					thread: {}
+					thread: {},
+					isShowCommentForm: false
 				}
 			},
+
 			addComment: function(comment){
 				var comments = this.state.comments;
 				var thread = this.state.thread;
@@ -83,38 +78,51 @@
 				comments.push(comment);
 				thread.commentCount = comments.length;
 				this.props.addComment(this.props.index, comment);
-				this.setState({comments:comments});
+				this.setState({
+					comments:comments,
+					isShowCommentForm: false
+				});
 			},
+
+			showComment: function(){
+				this.setState({
+					isShowCommentForm: !this.state.isShowCommentForm
+				});
+			},
+
 			onVoteUp: function(){
 				this.props.updateVote(this.props.index, this.props.thread.vote + 1);
 			},
+
 			onVoteDown: function(){
 				this.props.updateVote(this.props.index, this.props.thread.vote - 1);
 			},
+			
 			render: function(){
 				var comments = (this.state.comments.length == 1) ? this.state.comments.length+" comment" : this.state.comments.length+" comments";
-				return (
-					<li className="cf">
-						<div className="rank">
-							<span>{this.props.index + 1}</span>
-						</div>
-						<div className="vote">
-							<button onClick={this.onVoteUp}>
-								<i className="fa fa-chevron-up"></i>
-							</button>
-							<span>{this.props.thread.vote}</span>
-							<button onClick={this.onVoteDown}>
-								<i className="fa fa-chevron-down"></i>
-							</button>
-						</div>
-						<div className="description">
-							<h2>{this.props.thread.title}</h2>
-							<p>{this.props.thread.description}</p>
-							<span>submitted by: {this.props.thread.submittedBy} | {comments}</span>
+				var commentButton = (this.state.isShowCommentForm) ? "Cancel" : "Add Comment";
 
-							<Comments addComment={this.addComment} comments={this.state.comments}/>
+				return (
+					<li>
+						<div className="news-item">
+							<div className="votes">
+								<button className="up" onClick={this.onVoteUp}><span></span></button>
+								<p>{this.props.thread.vote}</p>
+								<button className="down" onClick={this.onVoteDown}><span></span></button>
+							</div>
+							<div className="content">
+								<h2>{this.props.thread.title}</h2>
+								<p>{this.props.thread.description}</p>
+								<footer>
+									<p className="news-submitter">Submitted by <strong>{this.props.thread.submittedBy}</strong> | <strong>{comments}</strong></p>
+									<div className="cta">
+										<button onClick={this.showComment}>{commentButton}</button>
+									</div>
+								</footer>
+							</div>
 						</div>
-						
+
+						<Comments addComment={this.addComment} comments={this.state.comments} isShowCommentForm={this.state.isShowCommentForm} />
 					</li>
 				)
 			}
@@ -123,31 +131,11 @@
 		var Reddit = React.createClass({
 			getInitialState: function(){
 				return {
-					threads: threads
+					threads: threads,
+					isShowThreadForm: false
 				}
 			},
-			onClick: function(e){
-				e.preventDefault();
-				var title = this.refs.title.value;
-				var body = this.refs.body.value;
-				var submittedBy = this.refs.submittedBy.value;
 
-				if(title == '' || body == '' || submittedBy == ''){
-					
-				}
-				else {
-					this.refs.title.value = '';
-					this.refs.body.value = '';
-					this.refs.submittedBy.value = '';
-
-					var threads = this.state.threads;
-					var rank = threads.length + 1;
-
-					threads.push({rank:rank, vote: 0, title:title, description:body, submittedBy:submittedBy, commentCount:0, comments: []});
-
-					this.setState({threads:threads});
-				}
-			},
 			updateVote: function(index, vote){
 				var threads = this.state.threads;
 				threads[index].vote = vote;
@@ -158,38 +146,90 @@
 
 			    this.setState({threads:sorted});
 			},
+
 			addComment: function(index, comment){
 				this.state.threads[index].comments.push(comment);
 			},
+
+			showAddThread: function(){
+				this.setState({
+					isShowThreadForm: !this.state.isShowThreadForm
+				});
+			},
+
+			onClick: function(e){
+				e.preventDefault();
+
+				var title = this.refs.title.value;
+				var body = this.refs.body.value;
+				var submittedBy = this.refs.submittedBy.value;
+
+				if(title != '' && body != '' && submittedBy != ''){
+					this.refs.title.value = '';
+					this.refs.body.value = '';
+					this.refs.submittedBy.value = '';
+
+					var threads = this.state.threads;
+					var rank = threads.length + 1;
+
+					threads.push({rank:rank, vote: 0, title:title, description:body, submittedBy:submittedBy, commentCount:0, comments: []});
+
+					this.setState({
+						threads:threads,
+						isShowThreadForm: false
+					});
+				}
+			},
+
+			onCancel: function(e){
+				e.preventDefault();
+
+				this.setState({
+					isShowThreadForm: false
+				});
+			},
+
 			render: function(){
 				var _this = this;
 				var threads = this.state.threads.map(function(thread, index){
-									console.log(thread.vote);
-									return <Thread thread={thread} key={index} index={index} updateVote={_this.updateVote} addComment={_this.addComment}/>;
+									return  <Thread thread={thread} 
+													key={index} 
+													index={index} 
+													updateVote={_this.updateVote} 
+													addComment={_this.addComment} />;
 								});
+
+				var threadForm;
+				if(this.state.isShowThreadForm){
+					threadForm = <div className="add-news">
+									<form>
+										<input type="text" type='text' ref="title" name='title' placeholder='Title' />
+										<textarea cols="30" rows="10" ref="body" name='body' placeholder='Story'></textarea>
+										<input type="text" ref='submittedBy' name='submittedBy' placeholder='Submitter'/>
+
+										<footer>
+											<input type="submit" value="Submit" onClick={this.onClick} />
+											<button onClick={this.onCancel}>Cancel</button>	
+										</footer>
+									</form>
+								</div>;
+				}
+
+				var addNewItem;
+				if(!this.state.isShowThreadForm){
+					addNewItem = <li className="placeholder" onClick={this.showAddThread}>
+									<strong>Add A News Item</strong>
+								 </li>;
+				}
+
 				return (
 					<div>
-						<section className="add-thread">
-							<form className="add-thread-form">
-								<div className="form-group">
-									<input className="form-control" type='text' ref="title" name='title' placeholder='Title'/>
-								</div>
-								<div className="form-group">
-									<textarea className="form-control" ref="body" name='body' placeholder='Body'></textarea>
-								</div>
-								<div className="form-group">
-									<input className="form-control" type='text' ref='submittedBy' name='submittedBy' placeholder='Name'/>
-								</div>
-								<div className="form-group">
-									<button className="btn btn-default" onClick={this.onClick}><i className='fa fa-1x fa-plus'></i></button>
-								</div>
-							</form>
-						</section>
-						<section className="content-wrapper">
-							<ul className="thread-list">
-								{threads}
-							</ul>
-						</section>
+						<ul className="news-list">
+							{threads}
+							{addNewItem}
+						</ul>
+
+						{threadForm}
 					</div>
 				)
 			}
