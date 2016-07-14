@@ -15,12 +15,12 @@
 	</section>
 
 	<script type="text/babel">
-		var Comment = React.createClass({
+		var Comments = React.createClass({
 			render: function(){
 				return (
-					<div>
-						I am a comment!
-					</div>
+					<ul className="comments">
+						<li>I am a comment</li>
+					</ul>
 				)
 			}
 		});
@@ -31,7 +31,7 @@
 					<li>
 						I am a thread!
 
-						<Comment />
+						<Comments />
 					</li>
 				)
 			}
@@ -41,8 +41,6 @@
 			render: function(){
 				return (
 					<div>
-						Hello World!
-
 						<ul className="news-list">
 							<Thread />
 						</ul>
