@@ -8,35 +8,45 @@
 	<script src="js/threads.js"></script>
 
 	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<section id="react-mount">
 	</section>
 
 	<script type="text/babel">
-		var Comment = React.createClass({
+		var Comments = React.createClass({
 			render: function(){
 				return (
-					<div>
-						<h4>{this.props.comment.name}</h4>
-						<p>{this.props.comment.comment}</p>
-					</div>
+					<ul className="comments">
+						<li>
+							<p>{this.props.comment[0].comment}</p>
+							<strong>{this.props.comment[0].name}</strong>
+						</li>
+					</ul>
 				)
 			}
 		});
 
 		var Thread = React.createClass({
+			getInitialState: function(){
+				return {
+							
+						};
+			},
+			
 			render: function(){
 				return (
-					<li className="cf">
-						<div className="description">
-							<h2>{this.props.title}</h2>
-							<p>{this.props.description}</p>
-
-							<Comment comment={this.props.comment}/>
+					<li>
+						<div className="news-item">
+							<div className="content">
+								<h2>{this.props.title}</h2>
+								<p>{this.props.description}</p>
+							</div>
 						</div>
+
+						<Comments comment={this.props.comment}/>
 					</li>
 				)
 			}
@@ -48,19 +58,20 @@
 					threads: threads
 				}
 			},
-			
+
 			render: function(){
 				var threads = this.state.threads.map(function(thread, index){
-					return <Thread key={index} title={thread.title} description={thread.description} comment={thread.comment} />
+					return <Thread key={index}
+								   title={thread.title}
+								   description={thread.description}
+								   comment={thread.comments} />
 				});
+
 				return (
 					<div>
-						Hello World!
-						<section className="content-wrapper">
-							<ul className="thread-list">
-								{threads}
-							</ul>
-						</section>
+						<ul className="news-list">
+							{threads}
+						</ul>
 					</div>
 				)
 			}
