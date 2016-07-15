@@ -40,15 +40,21 @@
 								<strong>{comment.name}</strong>
 							</li>;
 				});
+
+				var commentForm;
+				if(this.props.isShowCommentForm){
+					commentForm =   <li>
+										<form>
+											<input type="text" ref="name" name='name' placeholder='Name' />
+											<textarea cols="30" rows="10" ref="comment" name='comment' placeholder='Comment'></textarea>
+											<input type="submit" value="Submit" onClick={this.onClick} />
+										</form>
+									</li>;
+				}
+
 				return (
 					<ul className="comments">
-						<li>
-							<form>
-								<input type="text" ref="name" name='name' placeholder='Name' />
-								<textarea cols="30" rows="10" ref="comment" name='comment' placeholder='Comment'></textarea>
-								<input type="submit" value="Submit" onClick={this.onClick} />
-							</form>
-						</li>
+						{commentForm}
 						{comments}
 					</ul>
 				)
@@ -58,7 +64,8 @@
 		var Thread = React.createClass({
 			getInitialState: function(){
 				return {
-							comments: []
+							comments: [],
+							isShowCommentForm: false
 						};
 			},
 
@@ -68,7 +75,8 @@
 				comments.push(comment);
 				this.props.addComment(this.props.index, comment);
 				this.setState({
-					comments:comments
+					comments:comments,
+					isShowCommentForm: false
 				});
 			},
 			
@@ -81,8 +89,15 @@
 				this.props.updateVote(this.props.index, this.props.thread.vote - 1);
 			},
 
+			showComment: function(){
+				this.setState({
+					isShowCommentForm: !this.state.isShowCommentForm
+				});
+			},
+
 			render: function(){
 				var comments = (this.state.comments.length == 1) ? this.state.comments.length+" comment" : this.state.comments.length+" comments";
+				var commentButton = (this.state.isShowCommentForm) ? "Cancel" : "Add Comment";
 
 				return (
 					<li>
@@ -98,11 +113,14 @@
 								<p>{this.props.thread.description}</p>
 								<footer>
 									<p className="news-submitter">Submitted by <strong>{this.props.thread.submittedBy}</strong> | <strong>{comments}</strong></p>
+									<div className="cta">
+										<button onClick={this.showComment}>{commentButton}</button>
+									</div>
 								</footer>
 							</div>
 						</div>
 
-						<Comments comments={this.state.comments} addComment={this.addComment} />
+						<Comments comments={this.state.comments} addComment={this.addComment} isShowCommentForm={this.state.isShowCommentForm}/>
 					</li>
 				)
 			}
