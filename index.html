@@ -8,60 +8,49 @@
 	<script src="js/threads.js"></script>
 
 	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<section id="react-mount">
 	</section>
 
 	<script type="text/babel">
-		var Comment = React.createClass({
+		var Comments = React.createClass({
 			onClick: function(e){
 				e.preventDefault();
 
-				var comment = {name:this.refs.name.value, comment:this.refs.comment.value};
-				
-				this.refs.name.value = '';
-				this.refs.comment.value = '';
+				var name = this.refs.name.value;
+				var comment = this.refs.comment.value;
 
-				this.props.addComment( comment );
+				if(name != "" && comment != ""){
+					var comment = {name:name, comment:comment};
+					
+					this.refs.name.value = '';
+					this.refs.comment.value = '';
+
+					this.props.addComment( comment );
+				}
 			},
 
 			render: function(){
 				var comments = this.props.comments.map(function(comment, index){
-					return  <li className="cd comment" key={index}>
-								<h4>{comment.name}</h4>
+					return  <li key={index}>
 								<p>{comment.comment}</p>
+								<strong>{comment.name}</strong>
 							</li>;
 				});
-
-				var newComments = this.props.newComments.map(function(comment, index){
-					return  <li className="cd comment" key={index}>
-								<h4>{comment.name}</h4>
-								<p>{comment.comment}</p>
-							</li>;
-				});
-
 				return (
-					<div className="comments">
-						<ul className="comment-list">
-							{comments}
-						</ul>
-						<section className="add-thread">
-							<form className="add-comment-form">
-								<div className="form-group">
-									<input className="form-control" type='text' ref="name" name='name' placeholder='Name'/>
-								</div>
-								<div className="form-group">
-									<textarea className="form-control" ref="comment" name='comment' placeholder='Comment'></textarea>
-								</div>
-								<div className="form-group">
-									<button className="btn btn-default" onClick={this.onClick}><i className='fa fa-1x fa-plus'></i></button>
-								</div>
+					<ul className="comments">
+						<li>
+							<form>
+								<input type="text" ref="name" name='name' placeholder='Name' />
+								<textarea cols="30" rows="10" ref="comment" name='comment' placeholder='Comment'></textarea>
+								<input type="submit" value="Submit" onClick={this.onClick} />
 							</form>
-						</section>
-					</div>
+						</li>
+						{comments}
+					</ul>
 				)
 			}
 		});
@@ -69,51 +58,51 @@
 		var Thread = React.createClass({
 			getInitialState: function(){
 				return {
-					comments: []
-				}
-			},
-
-			onVoteUp: function(){
-				var vote = this.props.vote;
-				var newVote = vote + 1;
-
-				this.props.updateVote(this.props.index, newVote);
-			},
-
-			onVoteDown: function(){
-				var vote = this.props.vote;
-				var newVote = vote - 1;
-
-				this.props.updateVote(this.props.index, newVote);
+							comments: []
+						};
 			},
 
 			addComment: function(comment){
 				var comments = this.state.comments;
-				var thread = this.state.thread;
 
 				comments.push(comment);
 				this.props.addComment(this.props.index, comment);
-				this.setState({comments:comments});
+				this.setState({
+					comments:comments
+				});
+			},
+			
+			onVoteUp: function(){
+				//console.log('onVoteUp clicked!');
+				this.props.updateVote(this.props.index, this.props.thread.vote + 1);
+			},
+
+			onVoteDown: function(){
+				this.props.updateVote(this.props.index, this.props.thread.vote - 1);
 			},
 
 			render: function(){
-				return (
-					<li className="cf">
-						<div className="vote">
-							<button onClick={this.onVoteUp}>
-								<i className="fa fa-chevron-up"></i>
-							</button>
-							<span>{this.props.vote}</span>
-							<button onClick={this.onVoteDown}>
-								<i className="fa fa-chevron-down"></i>
-							</button>
-						</div>
-						<div className="description">
-							<h2>{this.props.title}</h2>
-							<p>{this.props.description}</p>
+				var comments = (this.state.comments.length == 1) ? this.state.comments.length+" comment" : this.state.comments.length+" comments";
 
-							<Comment index={this.props.index} comments={this.props.comments} newComments={this.state.comments} addComment={this.addComment} />
+				return (
+					<li>
+						<div className="news-item">
+							<div className="votes">
+								<button className="up" onClick={this.onVoteUp}><span></span></button>
+								<p>{this.props.thread.vote}</p>
+								<button className="down" onClick={this.onVoteDown}><span></span></button>
+							</div>
+
+							<div className="content">
+								<h2>{this.props.thread.title}</h2>
+								<p>{this.props.thread.description}</p>
+								<footer>
+									<p className="news-submitter">Submitted by <strong>{this.props.thread.submittedBy}</strong> | <strong>{comments}</strong></p>
+								</footer>
+							</div>
 						</div>
+
+						<Comments comments={this.state.comments} addComment={this.addComment} />
 					</li>
 				)
 			}
@@ -130,7 +119,7 @@
 				var threads = this.state.threads;
 				threads[index].vote = vote;
 
-				this.setState({threads:threads});
+			    this.setState({threads:threads});
 			},
 
 			addComment: function(index, comment){
@@ -140,16 +129,18 @@
 			render: function(){
 				var _this = this;
 				var threads = this.state.threads.map(function(thread, index){
-					return <Thread key={index} index={index} vote={thread.vote} title={thread.title} description={thread.description} comments={thread.comments} updateVote={_this.updateVote} addComment={_this.addComment}/>
+					return <Thread key={index}
+								   index={index}
+								   thread={thread}
+								   updateVote={_this.updateVote} 
+								   addComment={_this.addComment} />
 				});
+
 				return (
 					<div>
-						Hello World!
-						<section className="content-wrapper">
-							<ul className="thread-list">
-								{threads}
-							</ul>
-						</section>
+						<ul className="news-list">
+							{threads}
+						</ul>
 					</div>
 				)
 			}
